@@ -32,7 +32,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        // TODO 3rd lesson
         if (app()->isLocal()) {
             Schema::dropIfExists('products');
         }
