@@ -16,6 +16,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -111,6 +112,33 @@ class AuthController extends Controller
         request()->session()->invalidate();
 
         request()->session()->regenerateToken();
+
+        return redirect()
+            ->intended(route('home'));
+    }
+
+    public function github(): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
+    {
+        return Socialite::driver('github')->redirect();
+    }
+
+    public function githubCallBack()
+    {
+        $githubUser = Socialite::driver('github')->user();
+
+        // TODO 3rd move to custom table
+
+        dd($githubUser);
+        $user = User::query()
+            ->updateOrCreate([
+                'github_id' => $githubUser->id,
+            ], [
+                'name' => $githubUser->name ?? $githubUser->email,
+                'email' => $githubUser->email,
+                'password' => Hash::make(str()->random(20)),
+            ]);
+
+        auth()->login($user);
 
         return redirect()
             ->intended(route('home'));
