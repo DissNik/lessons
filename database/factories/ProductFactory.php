@@ -15,7 +15,6 @@ class ProductFactory extends Factory
     {
         return [
             'title' => ucfirst($this->faker->words(2, true)),
-            // TODO HOME Custom Provider Faker
             'thumbnail' => $this->faker->fixturesImage('products', 'images/products'),
             'price' => $this->faker->numberBetween(1000, 100000),
             'brand_id' => Brand::query()->first()->inRandomOrder()->value('id'),
