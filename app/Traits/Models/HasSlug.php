@@ -8,7 +8,6 @@ trait HasSlug
 {
     protected static function bootHasSlug()
     {
-        // TODO HOME
         static::creating(function (Model $model) {
             $model->makeSlug();
         });
@@ -29,13 +28,13 @@ trait HasSlug
 
     protected function slugUnique(string $slug): string
     {
-        $originaSlug = $slug;
+        $originalSlug = $slug;
         $i = 0;
 
         while ($this->isSlugExists($slug)) {
             $i++;
 
-            $slug = $originaSlug . '-' . $i;
+            $slug = $originalSlug . '-' . $i;
         }
 
         return $slug;
