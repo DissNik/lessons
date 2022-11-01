@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +16,21 @@ use Laravel\Socialite\Facades\Socialite;
 */
 
 Route::controller(AuthController::class)->group(function () {
-    // TODO 3rd lesson
+
+    //TODO 3rd lesson
 
     Route::get('/login', 'index')->name('login');
-    Route::post('/login', 'signIn')->name('signIn');
+
+    Route::post('/login', 'signIn')
+        ->middleware('throttle:auth')
+        ->name('signIn');
+
     Route::get('/sign-up', 'signUp')->name('signUp');
-    Route::post('/sign-up', 'store')->name('store');
+
+    Route::post('/sign-up', 'store')
+        ->middleware('throttle:auth')
+        ->name('store');
+
     Route::delete('/logout', 'logOut')->name('logOut');
     Route::get('/forgot-password', 'forgot')
         ->middleware('guest')
@@ -41,7 +49,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/socialite/github', 'github')
         ->name('socialite.github');
 
-    Route::get('/auth/socialite/github/callback','githubCallback')
+    Route::get('/auth/socialite/github/callback', 'githubCallback')
         ->name('socialite.github.callback');
 });
 

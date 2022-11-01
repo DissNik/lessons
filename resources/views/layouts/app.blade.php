@@ -9,19 +9,25 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-    @include('layouts.parts.header')
+@include('layouts.parts.header')
 
-    @include('layouts.parts.navbar')
+@include('layouts.parts.navbar')
 
-    @if (session()->has('message'))
-        {{ session('message') }}
-    @endif
+@if ($message = flash()->get())
+    <div class="{{ $message->class() }} p-5">
+        {{ $message->message() }}
+    </div>
+@endif
 
-    @yield('content')
+@if (session()->has('message'))
+    {{ session('message') }}
+@endif
 
-    @include('layouts.parts.footer')
+@yield('content')
 
-    @include('layouts.parts.copyright')
+@include('layouts.parts.footer')
+
+@include('layouts.parts.copyright')
 
 </body>
 </html>
