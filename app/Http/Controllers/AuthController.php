@@ -70,11 +70,13 @@ class AuthController extends Controller
             $request->only('email')
         );
 
-        // TODO 3rd lesson Flash
+        if ($status === Password::RESET_LINK_SENT) {
+            flash()->alert(__($status));
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['message' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+            return back();
+        }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 
     public function reset(string $token): Factory|View|Application
@@ -96,10 +98,14 @@ class AuthController extends Controller
                 event(new PasswordReset($user));
             }
         );
+        
+        if ($status === Password::PASSWORD_RESET) {
+            flash()->alert(__($status));
 
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('message', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
+            return redirect()->route('login');
+        }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 
     public function logOut(): RedirectResponse

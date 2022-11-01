@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::controller(AuthController::class)->group(function () {
-    // TODO 3rd lesson
+
+    //TODO 3rd lesson
 
     Route::get('/login', 'index')->name('login');
-    
+
     Route::post('/login', 'signIn')
         ->middleware('throttle:auth')
         ->name('signIn');
