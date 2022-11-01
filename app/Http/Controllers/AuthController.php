@@ -123,9 +123,6 @@ class AuthController extends Controller
     {
         $githubUser = Socialite::driver('github')->user();
 
-        // TODO 3rd move to custom table
-
-        dd($githubUser);
         $user = User::query()
             ->updateOrCreate([
                 'github_id' => $githubUser->id,
