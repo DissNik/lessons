@@ -7,7 +7,6 @@ use App\Http\Requests\ResetPassportFormRequest;
 use App\Http\Requests\SignInFormRequest;
 use App\Http\Requests\SignUpFormRequest;
 use App\Models\User;
-use http\Client\Request;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Foundation\Application;
@@ -27,8 +26,6 @@ class AuthController extends Controller
 
     public function signIn(SignInFormRequest $request): RedirectResponse
     {
-        // TODO 3rd lesson rate limit
-
         if (!auth()->attempt($request->validated())) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
