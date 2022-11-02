@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ForgotPassportFormRequest;
-use App\Http\Requests\ResetPassportFormRequest;
+use App\Http\Requests\ForgotPasswordFormRequest;
+use App\Http\Requests\ResetPasswordFormRequest;
 use App\Http\Requests\SignInFormRequest;
 use App\Http\Requests\SignUpFormRequest;
 use App\Models\User;
@@ -64,7 +64,7 @@ class AuthController extends Controller
         return view('auth.forgot-password');
     }
 
-    public function forgotPassword(ForgotPassportFormRequest $request): RedirectResponse
+    public function forgotPassword(ForgotPasswordFormRequest $request): RedirectResponse
     {
         $status = Password::sendResetLink(
             $request->only('email')
@@ -84,7 +84,7 @@ class AuthController extends Controller
         return view('auth.reset-password', ['token' => $token]);
     }
 
-    public function resetPassword(ResetPassportFormRequest $request): RedirectResponse
+    public function resetPassword(ResetPasswordFormRequest $request): RedirectResponse
     {
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
@@ -98,7 +98,7 @@ class AuthController extends Controller
                 event(new PasswordReset($user));
             }
         );
-        
+
         if ($status === Password::PASSWORD_RESET) {
             flash()->alert(__($status));
 
