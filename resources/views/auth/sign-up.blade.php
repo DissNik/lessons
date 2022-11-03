@@ -7,7 +7,7 @@
         <x-forms.auth-form
             title="Create an account"
             method="POST"
-            action="{{ route('store') }}"
+            action="{{ route('register') }}"
         >
             @csrf
 
@@ -28,9 +28,9 @@
                     >
                     </x-forms.text-input>
                     @error('name')
-                        <x-forms.error>
-                            {{ $message }}
-                        </x-forms.error>
+                    <x-forms.error>
+                        {{ $message }}
+                    </x-forms.error>
                     @enderror
                 </div>
 
@@ -45,9 +45,9 @@
                     >
                     </x-forms.text-input>
                     @error('email')
-                        <x-forms.error>
-                            {{ $message }}
-                        </x-forms.error>
+                    <x-forms.error>
+                        {{ $message }}
+                    </x-forms.error>
                     @enderror
                 </div>
                 <div>
@@ -60,9 +60,9 @@
                     >
                     </x-forms.text-input>
                     @error('password')
-                        <x-forms.error>
-                            {{ $message }}
-                        </x-forms.error>
+                    <x-forms.error>
+                        {{ $message }}
+                    </x-forms.error>
                     @enderror
                 </div>
                 <div>
@@ -75,9 +75,9 @@
                     >
                     </x-forms.text-input>
                     @error('password_confirmation')
-                        <x-forms.error>
-                            {{ $message }}
-                        </x-forms.error>
+                    <x-forms.error>
+                        {{ $message }}
+                    </x-forms.error>
                     @enderror
                 </div>
             </div>
