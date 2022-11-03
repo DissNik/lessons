@@ -45,24 +45,24 @@
             </div>
             <div>
                 @guest
-                <a href="{{ route('login') }}" class="text-gray-200 hover:text-white transition">Login</a>
-                <span class="text-gray-200 hover:text-white transition">/</span>
-                <a href="{{ route('signUp') }}" class="text-gray-200 hover:text-white transition">Register</a>
+                    <a href="{{ route('login') }}" class="text-gray-200 hover:text-white transition">Login</a>
+                    <span class="text-gray-200 hover:text-white transition">/</span>
+                    <a href="{{ route('register') }}" class="text-gray-200 hover:text-white transition">Register</a>
                 @endguest
                 @auth
-                <form
-                    method="POST"
-                    action="{{ route('logOut') }}">
-                    @csrf
-                    @method('DELETE')
+                    <form
+                        method="POST"
+                        action="{{ route('logout') }}">
+                        @csrf
+                        @method('DELETE')
 
-                    <button
-                        type="submit"
-                        class="text-gray-200 hover:text-white transition"
-                    >
-                        Logout
-                    </button>
-                </form>
+                        <button
+                            type="submit"
+                            class="text-gray-200 hover:text-white transition"
+                        >
+                            Logout
+                        </button>
+                    </form>
                 @endauth
             </div>
         </div>

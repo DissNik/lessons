@@ -1,39 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Create an account')
+@section('title', 'Login')
 
 @section('content')
     <div class="contain py-16">
         <x-forms.auth-form
-            title="Create an account"
+            title="Login"
             method="POST"
-            action="{{ route('register') }}"
+            action="{{ route('login') }}"
         >
             @csrf
 
             <x-slot:description>
                 <p class="text-gray-600 mb-6 text-sm">
-                    Register for new customer
+                    welcome back customer
                 </p>
             </x-slot:description>
 
             <div class="space-y-2">
-                <div>
-                    <x-forms.text-input
-                        label="Name"
-                        name="name"
-                        placeholder="Your name"
-                        :isError="$errors->has('name')"
-                        :value="old('name')"
-                    >
-                    </x-forms.text-input>
-                    @error('name')
-                    <x-forms.error>
-                        {{ $message }}
-                    </x-forms.error>
-                    @enderror
-                </div>
-
                 <div>
                     <x-forms.text-input
                         type="email"
@@ -65,27 +49,20 @@
                     </x-forms.error>
                     @enderror
                 </div>
-                <div>
-                    <x-forms.text-input
-                        type="password"
-                        label="Password confirmation"
-                        name="password_confirmation"
-                        placeholder="*******"
-                        :isError="$errors->has('password_confirmation')"
-                    >
-                    </x-forms.text-input>
-                    @error('password_confirmation')
-                    <x-forms.error>
-                        {{ $message }}
-                    </x-forms.error>
-                    @enderror
+            </div>
+            <div class="flex items-center justify-between mt-6">
+                <div class="flex items-center">
+                    <input type="checkbox" name="remember" id="remember"
+                           class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                    <label for="remember" class="text-gray-600 ml-3 cursor-pointer">Remember me</label>
                 </div>
+                <a href="{{ route('password.request') }}" class="text-primary">Forgot password</a>
             </div>
             <div class="mt-4">
                 <x-forms.primary-button
                     type="submit"
                 >
-                    Create account
+                    Login
                 </x-forms.primary-button>
             </div>
 
@@ -95,9 +72,9 @@
 
             <x-slot:buttons>
                 <p class="mt-4 text-center text-gray-600">
-                    Already have account?
-                    <a href="{{ route('login') }}" class="text-primary">
-                        Login now
+                    Don't have account?
+                    <a href="{{ route('register') }}" class="text-primary">
+                        Register now
                     </a>
                 </p>
             </x-slot:buttons>

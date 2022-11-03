@@ -2,14 +2,18 @@
 
 namespace Tests\Feature\App\Http\Controllers;
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthenticatedUserController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Requests\ForgotPasswordFormRequest;
 use App\Http\Requests\ResetPasswordFormRequest;
 use App\Http\Requests\SignInFormRequest;
 use App\Http\Requests\SignUpFormRequest;
 use App\Listeners\SendEmailNewUserListener;
-use App\Models\User;
 use App\Notifications\NewUserNotification;
+use Database\Factories\UserFactory;
+use Domain\Customer\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -25,16 +29,16 @@ class AuthControllerTest extends TestCase
 
     public function test_login_page_success(): void
     {
-        $this->get(action([AuthController::class, 'index']))
+        $this->get(action([AuthenticatedUserController::class, 'create']))
             ->assertOk()
-            ->assertViewIs('auth.index');
+            ->assertViewIs('auth.login');
     }
 
     public function test_sign_in_success(): void
     {
         $password = '12345678';
 
-        $user = User::factory()->create([
+        $user = UserFactory::new()->create([
             'password' => Hash::make($password)
         ]);
 
@@ -44,7 +48,7 @@ class AuthControllerTest extends TestCase
                 'password' => $password,
             ]);
 
-        $response = $this->post(action([AuthController::class, 'signIn']), $request);
+        $response = $this->post(action([AuthenticatedUserController::class, 'store']), $request);
 
         $response->assertValid()
             ->assertRedirect(route('home'));
@@ -52,14 +56,14 @@ class AuthControllerTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    public function test_sign_up_page_success(): void
+    public function test_register_page_success(): void
     {
-        $this->get(action([AuthController::class, 'signUp']))
+        $this->get(action([RegisteredUserController::class, 'create']))
             ->assertOk()
             ->assertViewIs('auth.sign-up');
     }
 
-    public function test_store_success(): void
+    public function test_register_success(): void
     {
         Notification::fake();
         Event::fake();
@@ -71,7 +75,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         $response = $this->post(
-            route('store'),
+            route('register'),
             $request
         );
 
@@ -101,7 +105,7 @@ class AuthControllerTest extends TestCase
 
     public function test_forgot_page_success(): void
     {
-        $this->get(action([AuthController::class, 'forgot']))
+        $this->get(action([ForgotPasswordController::class, 'create']))
             ->assertOk()
             ->assertViewIs('auth.forgot-password');
     }
@@ -110,13 +114,13 @@ class AuthControllerTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        $user = UserFactory::new()->create();
 
         $request = ForgotPasswordFormRequest::factory()->create([
             'email' => $user->email,
         ]);
 
-        $response = $this->post(action([AuthController::class, 'forgotPassword']), $request);
+        $response = $this->post(action([ForgotPasswordController::class, 'store']), $request);
 
         $response->assertValid();
 
@@ -127,19 +131,21 @@ class AuthControllerTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        $user = UserFactory::new()->create();
 
         $request = ForgotPasswordFormRequest::factory()->create([
             'email' => $user->email,
         ]);
 
-        $this->post(action([AuthController::class, 'forgotPassword']), $request);
+        $this->post(action([ForgotPasswordController::class, 'store']), $request);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get(action([
-                AuthController::class,
-                'reset',
-            ], $notification->token
+            $response = $this->get(action(
+                [
+                    ResetPasswordController::class,
+                    'create',
+                ],
+                $notification->token
             ));
 
             $response->assertOk()
@@ -154,13 +160,13 @@ class AuthControllerTest extends TestCase
         Notification::fake();
         Event::fake();
 
-        $user = User::factory()->create();
+        $user = UserFactory::new()->create();
 
         $request = ForgotPasswordFormRequest::factory()->create([
             'email' => $user->email,
         ]);
 
-        $this->post(action([AuthController::class, 'forgotPassword']), $request);
+        $this->post(action([ForgotPasswordController::class, 'store']), $request);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
             $request = ResetPasswordFormRequest::factory()->create([
@@ -168,7 +174,7 @@ class AuthControllerTest extends TestCase
                 'email' => $user->email,
             ]);
 
-            $response = $this->post(action([AuthController::class, 'resetPassword'], $request));
+            $response = $this->post(action([ResetPasswordController::class, 'store'], $request));
 
             $user = User::query()->find($user->id);
 
@@ -184,10 +190,10 @@ class AuthControllerTest extends TestCase
 
     public function test_logout_success(): void
     {
-        $user = User::factory()->create();
+        $user = UserFactory::new()->create();
 
         $this->actingAs($user)
-            ->delete(action([AuthController::class, 'logOut']));
+            ->delete(action([AuthenticatedUserController::class, 'destroy']));
 
         $this->assertGuest();
     }
