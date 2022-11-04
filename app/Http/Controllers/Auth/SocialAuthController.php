@@ -32,10 +32,10 @@ class SocialAuthController extends Controller
 
         $user = User::query()
             ->updateOrCreate([
-                $driver . '_id' => $githubUser->id,
+                $driver . '_id' => $githubUser->getId(),
             ], [
-                'name' => $githubUser->name ?? $githubUser->email,
-                'email' => $githubUser->email,
+                'name' => $githubUser->getName() ?? $githubUser->getEmail(),
+                'email' => $githubUser->getEmail(),
                 'password' => Hash::make(str()->random(20)),
             ]);
 
