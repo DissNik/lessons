@@ -11,7 +11,7 @@ class SignUpFormRequestFactory extends RequestFactory
         $password = $this->faker->password(8);
 
         return [
-            'email' => $this->faker->email,
+            'email' => $this->faker->freeEmail,
             'name' => $this->faker->name(),
             'password' => $password,
             'password_confirmation' => $password,
