@@ -37,4 +37,26 @@ class ForgotPasswordControllerTest extends TestCase
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
+
+    public function test_forgot_password_fail_with_error_email(): void
+    {
+        Notification::fake();
+
+        $request = ForgotPasswordFormRequest::factory()->create();
+
+        $this->assertDatabaseMissing('users', [
+            'email' => $request['email']
+        ]);
+
+        $this->post(action([ForgotPasswordController::class, 'store']), $request)
+            ->assertSessionHasErrors(['email']);
+
+        Notification::assertNothingSent();
+    }
+
+    public function test_forgot_password_fail_with_empty_form(): void
+    {
+        $this->post(action([ForgotPasswordController::class, 'store']))
+            ->assertSessionHasErrors(['email']);
+    }
 }

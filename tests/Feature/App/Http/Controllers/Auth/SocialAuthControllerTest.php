@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Mockery;
+use Support\Flash\Flash;
 use Tests\TestCase;
 
 class SocialAuthControllerTest extends TestCase
@@ -17,16 +18,25 @@ class SocialAuthControllerTest extends TestCase
 
     public function test_socialite_redirect_success(): void
     {
-        Http::fake([
-            'https://github.com/login/oauth/authorize' => Http::response(['ok' => true])
-        ]);
+        Http::fake();
 
         $this->get(action([SocialAuthController::class, 'redirect'], ['driver' => 'github']))
             ->assertRedirect();
     }
 
+    public function test_socialite_redirect_fail(): void
+    {
+        Http::fake();
+
+        $this->get(action([SocialAuthController::class, 'redirect'], ['driver' => 'google']))
+            ->assertSessionHas(Flash::MESSAGE_KEY)
+            ->assertRedirect();
+    }
+
     public function test_socialite_callback_success(): void
     {
+        Http::fake();
+
         $email = fake()->freeEmail;
 
         $this->assertDatabaseMissing('users', [
@@ -56,5 +66,14 @@ class SocialAuthControllerTest extends TestCase
             ->first();
 
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_socialite_callback_fail(): void
+    {
+        Http::fake();
+
+        $this->get(action([SocialAuthController::class, 'callback'], ['driver' => 'google']))
+            ->assertSessionHas(Flash::MESSAGE_KEY)
+            ->assertRedirect();
     }
 }

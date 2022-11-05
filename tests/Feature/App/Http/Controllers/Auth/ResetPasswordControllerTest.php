@@ -14,6 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class ResetPasswordControllerTest extends TestCase
@@ -76,6 +77,33 @@ class ResetPasswordControllerTest extends TestCase
             Event::assertDispatched(PasswordReset::class);
 
             $response->assertRedirect(route('login'));
+
+            return true;
+        });
+    }
+
+    public function test_reset_password_with_error_token(): void
+    {
+        Notification::fake();
+        Event::fake();
+
+        $user = UserFactory::new()->create();
+
+        $request = ForgotPasswordFormRequest::factory()->create([
+            'email' => $user->email,
+        ]);
+
+        $this->post(action([ForgotPasswordController::class, 'store']), $request);
+
+        Notification::assertSentTo($user, ResetPassword::class, function () use ($user) {
+            $request = ResetPasswordFormRequest::factory()->create([
+                'token' => Str::random(10),
+                'email' => $user->email,
+            ]);
+
+            $response = $this->post(action([ResetPasswordController::class, 'store'], $request));
+
+            $response->assertSessionHasErrors(['email']);
 
             return true;
         });

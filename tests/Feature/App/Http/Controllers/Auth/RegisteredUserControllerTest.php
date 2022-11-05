@@ -7,11 +7,13 @@ use App\Http\Requests\AuthGithubRequest;
 use App\Http\Requests\SignUpFormRequest;
 use App\Listeners\SendEmailNewUserListener;
 use App\Notifications\NewUserNotification;
+use Database\Factories\UserFactory;
 use Domain\Customer\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class RegisteredUserControllerTest extends TestCase
@@ -63,5 +65,49 @@ class RegisteredUserControllerTest extends TestCase
         $this->assertAuthenticatedAs($user);
 
         $response->assertRedirect(route('home'));
+    }
+
+    public function test_register_fail_with_existing_email(): void
+    {
+        Event::fake();
+        Notification::fake();
+
+        $user = UserFactory::new()->create();
+
+        $request = SignUpFormRequest::factory()->create([
+            'email' => $user->email,
+        ]);
+
+        $response = $this->post(
+            route('register'),
+            $request
+        );
+
+        $response->assertSessionHasErrors('email');
+
+        Notification::assertNothingSentTo($user, NewUserNotification::class);
+
+        $this->assertGuest();
+    }
+
+    public function test_register_fail_with_error_password_confirmation(): void
+    {
+        Notification::fake();
+        Event::fake();
+
+        $request = SignUpFormRequest::factory()->create([
+            'password_confirmation' => Str::random(10),
+        ]);
+
+        $response = $this->post(
+            route('register'),
+            $request
+        );
+
+        $response->assertSessionHasErrors('password');
+
+        Notification::assertNothingSent();
+
+        $this->assertGuest();
     }
 }
