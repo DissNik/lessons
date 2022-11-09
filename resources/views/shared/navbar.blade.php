@@ -38,17 +38,12 @@
 
         <div class="flex items-center justify-between flex-grow pl-12">
             <div class="flex items-center space-x-6 capitalize">
-                <a href="../index.html" class="text-gray-200 hover:text-white transition">Home</a>
-                <a href="pages/shop.html" class="text-gray-200 hover:text-white transition">Shop</a>
+                <a href="{{ route('home') }}" class="text-gray-200 hover:text-white transition">Home</a>
+                <a href="#" class="text-gray-200 hover:text-white transition">Shop</a>
                 <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
                 <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
             </div>
             <div>
-                @guest
-                    <a href="{{ route('login') }}" class="text-gray-200 hover:text-white transition">Login</a>
-                    <span class="text-gray-200 hover:text-white transition">/</span>
-                    <a href="{{ route('register') }}" class="text-gray-200 hover:text-white transition">Register</a>
-                @endguest
                 @auth
                     <form
                         method="POST"
@@ -63,6 +58,10 @@
                             Logout
                         </button>
                     </form>
+                @elseguest
+                    <a href="{{ route('login') }}" class="text-gray-200 hover:text-white transition">Login</a>
+                    <span class="text-gray-200 hover:text-white transition">/</span>
+                    <a href="{{ route('register') }}" class="text-gray-200 hover:text-white transition">Register</a>
                 @endauth
             </div>
         </div>

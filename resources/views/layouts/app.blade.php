@@ -9,15 +9,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-@include('layouts.parts.header')
+@include('shared.header')
 
-@include('layouts.parts.navbar')
+@include('shared.navbar')
 
-@if ($message = flash()->get())
-    <div class="{{ $message->class() }} p-5">
-        {{ $message->message() }}
-    </div>
-@endif
+@include('shared.flash')
 
 @if (session()->has('message'))
     {{ session('message') }}
@@ -25,9 +21,9 @@
 
 @yield('content')
 
-@include('layouts.parts.footer')
+@include('shared.footer')
 
-@include('layouts.parts.copyright')
+@include('shared.copyright')
 
 </body>
 </html>
