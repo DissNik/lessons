@@ -38,12 +38,19 @@
                     2
                 </div>
             </a>
-            <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
-                <div class="text-2xl">
-                    <i class="fa-regular fa-user"></i>
-                </div>
-                <div class="text-xs leading-3">Account</div>
-            </a>
+            @auth
+                <a href="#" class="text-center text-gray-700 hover:text-primary transition relative">
+                    <img class="inline rounded-full max-w-none" src="{{ auth()->user()->avatar }}">
+                    <div class="text-xs leading-3">Account</div>
+                </a>
+            @elseguest
+                <a href="{{ route('login') }}" class="text-center text-gray-700 hover:text-primary transition relative">
+                    <div class="text-2xl">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="text-xs leading-3">Account</div>
+                </a>
+            @endauth
         </div>
     </div>
 </header>
