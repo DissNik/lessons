@@ -11,10 +11,10 @@ class ResetPasswordFormRequestFactory extends RequestFactory
         $password = $this->faker->password(8);
 
         return [
-            'token' => $this->faker->password(40),
             'email' => $this->faker->email,
             'password' => $password,
             'password_confirmation' => $password,
+            'token' => $this->faker->password(40),
         ];
     }
 }
