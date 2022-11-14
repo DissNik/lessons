@@ -23,25 +23,20 @@ class ForgotPasswordControllerTest extends TestCase
 
     public function test_forgot_password_success(): void
     {
-        Notification::fake();
-
         $user = UserFactory::new()->create();
 
         $request = ForgotPasswordFormRequest::factory()->create([
             'email' => $user->email,
         ]);
 
-        $response = $this->post(action([ForgotPasswordController::class, 'store']), $request);
-
-        $response->assertValid();
+        $this->post(action([ForgotPasswordController::class, 'store']), $request)
+            ->assertValid();
 
         Notification::assertSentTo($user, ResetPassword::class);
     }
 
     public function test_forgot_password_fail_with_error_email(): void
     {
-        Notification::fake();
-
         $request = ForgotPasswordFormRequest::factory()->create();
 
         $this->assertDatabaseMissing('users', [
@@ -49,7 +44,7 @@ class ForgotPasswordControllerTest extends TestCase
         ]);
 
         $this->post(action([ForgotPasswordController::class, 'store']), $request)
-            ->assertSessionHasErrors(['email']);
+            ->assertInvalid(['email']);
 
         Notification::assertNothingSent();
     }
@@ -57,6 +52,8 @@ class ForgotPasswordControllerTest extends TestCase
     public function test_forgot_password_fail_with_empty_form(): void
     {
         $this->post(action([ForgotPasswordController::class, 'store']))
-            ->assertSessionHasErrors(['email']);
+            ->assertInvalid(['email']);
+
+        Notification::assertNothingSent();
     }
 }

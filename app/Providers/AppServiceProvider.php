@@ -4,10 +4,10 @@ namespace App\Providers;
 
 use App\Http\Kernel;
 use Carbon\CarbonInterval;
-use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Services\Telegram\TelegramBotApi;
+use Services\Telegram\TelegramBotApiContract;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,8 +15,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::shouldBeStrict(app()->isLocal());
 
+        $this->app->bind(TelegramBotApiContract::class, TelegramBotApi::class);
+
         if (app()->isProduction()) {
-            DB:listen(function ($query) {
+            DB:
+            listen(function ($query) {
                 if ($query->time > 100) {
                     logger()
                         ->channel('telegram')

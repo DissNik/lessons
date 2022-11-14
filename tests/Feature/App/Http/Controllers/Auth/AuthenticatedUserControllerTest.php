@@ -47,7 +47,7 @@ class AuthenticatedUserControllerTest extends TestCase
         $request = SignInFormRequest::factory()->create();
 
         $this->post(action([AuthenticatedUserController::class, 'store']), $request)
-            ->assertSessionHasErrors(['email']);
+            ->assertInvalid(['email']);
 
         $this->assertGuest();
     }
@@ -65,7 +65,7 @@ class AuthenticatedUserControllerTest extends TestCase
         ]);
 
         $this->post(action([AuthenticatedUserController::class, 'store']), $request)
-            ->assertSessionHasErrors(['email']);
+            ->assertInvalid(['email']);
 
         $this->assertGuest();
     }
@@ -86,5 +86,11 @@ class AuthenticatedUserControllerTest extends TestCase
             ->delete(action([AuthenticatedUserController::class, 'destroy']));
 
         $this->assertGuest();
+    }
+
+    public function test_logout_guest_middleware_fail(): void
+    {
+        $this->delete(action([AuthenticatedUserController::class, 'destroy']))
+            ->assertRedirect(route('home'));
     }
 }
