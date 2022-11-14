@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProductFactory extends Factory
 {
+    protected $model = Product::class;
+
     public function definition(): array
     {
         return [
@@ -21,5 +23,14 @@ class ProductFactory extends Factory
             'on_home_page' => $this->faker->boolean(),
             'sorting' => $this->faker->numberBetween(1, 999),
         ];
+    }
+
+    public function homePage(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'on_home_page' => true
+            ];
+        });
     }
 }

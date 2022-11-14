@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
+    protected $model = Category::class;
+
     public function definition(): array
     {
         return [
@@ -18,5 +20,14 @@ class CategoryFactory extends Factory
             'sorting' => $this->faker->numberBetween(1, 999),
             'thumbnail' => $this->faker->fixturesImage('categories', 'images/categories'),
         ];
+    }
+
+    public function homePage(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'on_home_page' => true
+            ];
+        });
     }
 }

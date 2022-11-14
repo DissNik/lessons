@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Traits\Models\HasSlug;
 use App\Traits\Models\HasThumbnail;
+use Database\Factories\ProductFactory;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +44,11 @@ class Product extends Model
         'on_home_page',
         'sorting',
     ];
+
+    protected static function newFactory(): Factory
+    {
+        return new ProductFactory();
+    }
 
     public function scopeHomePage(Builder $query)
     {
