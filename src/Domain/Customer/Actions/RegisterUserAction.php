@@ -3,18 +3,19 @@
 namespace Domain\Customer\Actions;
 
 use Domain\Customer\Contracts\RegisterUserContract;
+use Domain\Customer\DTOs\NewUserDTO;
 use Domain\Customer\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterUserAction implements RegisterUserContract
 {
-    public function __invoke(string $name, string $email, string $password)
+    public function __invoke(NewUserDTO $data)
     {
         $user = User::query()->create([
-            'name' => $name,
-            'email' => $email,
-            'password' => Hash::make($password),
+            'name' => $data->name,
+            'email' => $data->email,
+            'password' => Hash::make($data->password),
         ]);
 
         event(new Registered($user));

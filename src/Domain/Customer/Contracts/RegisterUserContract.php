@@ -2,8 +2,10 @@
 
 namespace Domain\Customer\Contracts;
 
+use Domain\Customer\DTOs\NewUserDTO;
+
 interface RegisterUserContract
 {
 
-    public function __invoke(string $name, string $email, string $password);
+    public function __invoke(NewUserDTO $data);
 }
