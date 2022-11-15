@@ -4,7 +4,7 @@ namespace Domain\Catalog\Models;
 
 use App\Models\Product;
 use Database\Factories\BrandFactory;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Domain\Catalog\QueryBuilders\BrandQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,8 +18,7 @@ use Support\Traits\Models\HasThumbnail;
  * @property boolean on_home_page
  * @property integer sorting
  *
- * @method static Builder|Brand query()
- * @method Builder|Brand homePage()
+ * @method static Brand|BrandQueryBuilder query()
  */
 class Brand extends Model
 {
@@ -45,11 +44,9 @@ class Brand extends Model
         'sorting',
     ];
 
-    public function scopeHomePage(Builder $query)
+    public function newEloquentBuilder($query)
     {
-        $query->where('on_home_page', true)
-            ->orderBy('sorting')
-            ->limit(4);
+        return new BrandQueryBuilder($query);
     }
 
     public function products(): HasMany

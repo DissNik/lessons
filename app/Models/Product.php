@@ -24,19 +24,14 @@ use Support\Traits\Models\HasThumbnail;
  * @property boolean on_home_page
  * @property integer sorting
  *
- * @method static Builder|Brand query()
- * @method Builder|Brand homePage()
+ * @method static Builder|Product query()
+ * @method Builder|Product homePage()
  */
 class Product extends Model
 {
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
-
-    protected function thumbnailDir(): string
-    {
-        return 'products';
-    }
 
     protected $fillable = [
         'slug',
@@ -55,6 +50,11 @@ class Product extends Model
     protected static function newFactory(): Factory
     {
         return new ProductFactory();
+    }
+
+    protected function thumbnailDir(): string
+    {
+        return 'products';
     }
 
     public function scopeHomePage(Builder $query)
