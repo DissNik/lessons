@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
-use App\Traits\Models\HasSlug;
-use App\Traits\Models\HasThumbnail;
+use Database\Factories\ProductFactory;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Support\Casts\PriceCast;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
 
 /**
  * @property string slug
@@ -19,19 +24,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property boolean on_home_page
  * @property integer sorting
  *
- * @method static Builder|Brand query()
- * @method Builder|Brand homePage()
+ * @method static Builder|Product query()
+ * @method Builder|Product homePage()
  */
 class Product extends Model
 {
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
-
-    protected function thumbnailDir(): string
-    {
-        return 'products';
-    }
 
     protected $fillable = [
         'slug',
@@ -42,6 +42,20 @@ class Product extends Model
         'on_home_page',
         'sorting',
     ];
+
+    protected $casts = [
+        'price' => PriceCast::class
+    ];
+
+    protected static function newFactory(): Factory
+    {
+        return new ProductFactory();
+    }
+
+    protected function thumbnailDir(): string
+    {
+        return 'products';
+    }
 
     public function scopeHomePage(Builder $query)
     {

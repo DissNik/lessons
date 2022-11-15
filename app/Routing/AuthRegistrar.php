@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Customer\Routing;
+namespace App\Routing;
 
 use App\Contracts\RouteRegistrar;
 use App\Http\Controllers\Auth\AuthenticatedUserController;

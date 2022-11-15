@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Catalog\Models;
 
-use App\Traits\Models\HasSlug;
-use App\Traits\Models\HasThumbnail;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Product;
+use Database\Factories\CategoryFactory;
+use Domain\Catalog\Collections\CategoryCollection;
+use Domain\Catalog\QueryBuilders\CategoryQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
 
 /**
  * @property string slug
@@ -16,14 +19,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property integer sorting
  * @property string thumbnail
  *
- * @method static Builder|Brand query()
- * @method Builder|Brand homePage()
+ * @method static Category|CategoryQueryBuilder query()
  */
 class Category extends Model
 {
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
+
+    protected static function newFactory()
+    {
+        return CategoryFactory::new();
+    }
 
     protected function thumbnailDir(): string
     {
@@ -38,11 +45,14 @@ class Category extends Model
         'thumbnail',
     ];
 
-    public function scopeHomePage(Builder $query)
+    public function newCollection(array $models = []): CategoryCollection
     {
-        $query->where('on_home_page', true)
-            ->orderBy('sorting')
-            ->limit(6);
+        return new CategoryCollection($models);
+    }
+
+    public function newEloquentBuilder($query): CategoryQueryBuilder
+    {
+        return new CategoryQueryBuilder($query);
     }
 
     public function products(): BelongsToMany

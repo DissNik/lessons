@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Catalog\Models;
 
-use App\Traits\Models\HasSlug;
-use App\Traits\Models\HasThumbnail;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\Product;
+use Database\Factories\BrandFactory;
+use Domain\Catalog\QueryBuilders\BrandQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Support\Traits\Models\HasSlug;
+use Support\Traits\Models\HasThumbnail;
 
 /**
  * @property string slug
@@ -16,14 +18,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property boolean on_home_page
  * @property integer sorting
  *
- * @method static Builder|Brand query()
- * @method Builder|Brand homePage()
+ * @method static Brand|BrandQueryBuilder query()
  */
 class Brand extends Model
 {
     use HasFactory;
     use HasSlug;
     use HasThumbnail;
+
+    protected static function newFactory()
+    {
+        return BrandFactory::new();
+    }
 
     protected function thumbnailDir(): string
     {
@@ -38,11 +44,9 @@ class Brand extends Model
         'sorting',
     ];
 
-    public function scopeHomePage(Builder $query)
+    public function newEloquentBuilder($query)
     {
-        $query->where('on_home_page', true)
-            ->orderBy('sorting')
-            ->limit(4);
+        return new BrandQueryBuilder($query);
     }
 
     public function products(): HasMany
