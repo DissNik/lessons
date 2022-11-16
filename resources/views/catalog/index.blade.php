@@ -13,7 +13,7 @@
         <a href="{{ route('catalog') }}" class="text-primary text-base">
             Shop
         </a>
-        @if ($category->exists)
+        @if($category->exists)
             <span class="text-sm text-gray-400">
                 <i class="fa-solid fa-chevron-right"></i>
             </span>
