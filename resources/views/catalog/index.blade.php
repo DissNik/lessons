@@ -53,7 +53,7 @@
                                 >
                                 <label for="brand-{{ $brand->id }}"
                                        class="text-gray-600 ml-3 cusror-pointer">{{ $brand->title }}</label>
-                                <div class="ml-auto text-gray-600 text-sm">(15)</div>
+                                <div class="ml-auto text-gray-600 text-sm">({{ $brand->count }})</div>
                             </div>
                         @endforeach
                     </div>

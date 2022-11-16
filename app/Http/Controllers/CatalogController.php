@@ -9,6 +9,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 
 class CatalogController extends Controller
 {
@@ -20,7 +21,14 @@ class CatalogController extends Controller
             ->get();
 
         $brands = Brand::query()
-            ->select(['id', 'title'])
+            ->leftJoin(
+                'products',
+                'products.brand_id',
+                '=',
+                'brands.id'
+            )
+            ->select('brands.id', 'brands.title', DB::raw('count(*) as count'))
+            ->groupBy('brands.id')
             ->has('products')
             ->get();
 
