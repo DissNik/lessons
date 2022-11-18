@@ -15,10 +15,10 @@
 
         <div class="flex items-center justify-between flex-grow pl-12">
             <div class="flex items-center space-x-6 capitalize">
-                <a href="{{ route('home') }}" class="text-gray-200 hover:text-white transition">Home</a>
-                <a href="{{ route('catalog') }}" class="text-gray-200 hover:text-white transition">Shop</a>
-                <a href="#" class="text-gray-200 hover:text-white transition">About us</a>
-                <a href="#" class="text-gray-200 hover:text-white transition">Contact us</a>
+                @foreach($menu as $item)
+                    <a href="{{ $item->link() }}"
+                       class="@if($item->isActive()) text-white @else text-gray-200 @endif hover:text-white transition">{{ $item->label() }}</a>
+                @endforeach
             </div>
             <div>
                 @auth
