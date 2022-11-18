@@ -43,6 +43,7 @@ class Category extends Model
         'on_home_page',
         'sorting',
         'thumbnail',
+        'icon'
     ];
 
     public function newCollection(array $models = []): BrandCollection

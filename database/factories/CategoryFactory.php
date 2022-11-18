@@ -19,6 +19,7 @@ class CategoryFactory extends Factory
             'on_home_page' => $this->faker->boolean(),
             'sorting' => $this->faker->numberBetween(1, 999),
             'thumbnail' => $this->faker->fixturesImage('categories', 'images/categories'),
+            'icon' => $this->faker->fixturesImage('icons', 'images/icons'),
         ];
     }
 
