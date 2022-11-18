@@ -4,7 +4,7 @@ namespace Domain\Catalog\Models;
 
 use App\Models\Product;
 use Database\Factories\CategoryFactory;
-use Domain\Catalog\Collections\CategoryCollection;
+use Domain\Catalog\Collections\BrandCollection;
 use Domain\Catalog\QueryBuilders\CategoryQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,9 +45,9 @@ class Category extends Model
         'thumbnail',
     ];
 
-    public function newCollection(array $models = []): CategoryCollection
+    public function newCollection(array $models = []): BrandCollection
     {
-        return new CategoryCollection($models);
+        return new BrandCollection($models);
     }
 
     public function newEloquentBuilder($query): CategoryQueryBuilder
