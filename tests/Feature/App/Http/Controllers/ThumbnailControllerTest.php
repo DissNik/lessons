@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\App\Http\Controllers;
 
-use App\Http\Controllers\ThumbnailController;
+use App\Models\Product;
 use Database\Factories\ProductFactory;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -13,73 +14,68 @@ class ThumbnailControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected string $filePath;
-    protected string $allowedSize;
+    protected Product $product;
+    protected Filesystem $storage;
+    protected string $size;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        Storage::fake('image');
+        $this->size = '200x200';
 
-        $this->filePath = File::basename(ProductFactory::new()->create()->thumbnail);
+        config()->set('thumbnail', ['allowed_sizes' => [$this->size]]);
 
-        $this->allowedSize = config('thumbnail.allowed_sizes.0');
+        $this->storage = Storage::disk('images');
+        $this->product = ProductFactory::new()->create();
     }
 
     public function test_resize_success(): void
     {
-        $this->get(action(ThumbnailController::class, [
-            'size' => $this->allowedSize,
-            'dir' => 'products',
-            'method' => 'resize',
-            'file' => $this->filePath
-        ]))
+        $method = 'resize';
+
+        $this->get($this->product->makeThumbnail($this->size, $method))
             ->assertOk();
+
+        $this->storage->assertExists(
+            "products/$method/$this->size/" . File::basename($this->product->thumbnail)
+        );
     }
 
     public function test_crop_success(): void
     {
-        $this->get(action(ThumbnailController::class, [
-            'size' => $this->allowedSize,
-            'dir' => 'products',
-            'method' => 'crop',
-            'file' => $this->filePath
-        ]))
+        $method = 'crop';
+
+        $this->get($this->product->makeThumbnail($this->size, $method))
             ->assertOk();
+
+        $this->storage->assertExists(
+            "products/$method/$this->size/" . File::basename($this->product->thumbnail)
+        );
     }
 
     public function test_fit_success(): void
     {
-        $this->get(action(ThumbnailController::class, [
-            'size' => $this->allowedSize,
-            'dir' => 'products',
-            'method' => 'fit',
-            'file' => $this->filePath
-        ]))
+        $method = 'fit';
+
+        $this->get($this->product->makeThumbnail($this->size, $method))
             ->assertOk();
+
+        $this->storage->assertExists(
+            "products/$method/$this->size/" . File::basename($this->product->thumbnail)
+        );
     }
 
     public function test_fail_by_error_size(): void
     {
-        $this->get(action(ThumbnailController::class, [
-            'size' => '0x0',
-            'dir' => 'products',
-            'method' => 'resize',
-            'file' => $this->filePath
-        ]))
+        $this->get($this->product->makeThumbnail('0x0'))
             ->assertStatus(403)
             ->assertSee('Size not allowed');
     }
 
     public function test_fail_by_error_method(): void
     {
-        $this->get(action(ThumbnailController::class, [
-            'size' => $this->allowedSize,
-            'dir' => 'products',
-            'method' => 'test',
-            'file' => $this->filePath
-        ]))
+        $this->get($this->product->makeThumbnail($this->size, 'test'))
             ->assertStatus(404);
     }
 }

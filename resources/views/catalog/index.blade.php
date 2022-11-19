@@ -26,38 +26,9 @@
         <!-- sidebar -->
         <div class="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hidden">
             <form action="{{ route('catalog', $category) }}" class="divide-y divide-gray-200 space-y-5">
-                <div class="pt-4">
-                    <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
-                    <div class="mt-4 flex items-center">
-                        <input type="text" name="filters[price][from]" id="min"
-                               value="{{ request('filters.price.from', 0) }}"
-                               class="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                               placeholder="min">
-                        <span class="mx-3 text-gray-500">-</span>
-                        <input type="text" name="filters[price][to]" id="max"
-                               value="{{ request('filters.price.to', 100000) }}"
-                               class="w-full border-gray-300 focus:border-primary rounded focus:ring-0 px-3 py-1 text-gray-600 shadow-sm"
-                               placeholder="max">
-                    </div>
-                </div>
-                <div class="pt-4">
-                    <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
-                    <div class="space-y-2">
-                        @foreach($brands as $brand)
-                            <div class="flex items-center">
-                                <input type="checkbox" name="filters[brands][{{ $brand->id }}]"
-                                       id="brand-{{ $brand->id }}"
-                                       class="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                                       value="{{ $brand->id }}"
-                                    @checked(request('filters.brands.' . $brand->id))
-                                >
-                                <label for="brand-{{ $brand->id }}"
-                                       class="text-gray-600 ml-3 cusror-pointer">{{ $brand->title }}</label>
-                                <div class="ml-auto text-gray-600 text-sm">({{ $brand->count }})</div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
+                @foreach(filters() as $filter)
+                    {!! $filter !!}
+                @endforeach
                 <div class="pt-4">
                     <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">size</h3>
                     <div class="flex items-center gap-2">

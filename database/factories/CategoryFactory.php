@@ -18,8 +18,8 @@ class CategoryFactory extends Factory
             'title' => ucfirst($this->faker->words(2, true)),
             'on_home_page' => $this->faker->boolean(),
             'sorting' => $this->faker->numberBetween(1, 999),
-            'thumbnail' => $this->faker->fixturesImage('categories', 'images/categories'),
-            'icon' => $this->faker->fixturesImage('icons', 'images/icons'),
+            'thumbnail' => $this->faker->fixturesImage('categories', 'categories'),
+            'icon' => $this->faker->fixturesImage('icons', 'icons'),
         ];
     }
 

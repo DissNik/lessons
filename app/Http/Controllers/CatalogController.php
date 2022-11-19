@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\DB;
 
 class CatalogController extends Controller
 {
@@ -17,18 +15,6 @@ class CatalogController extends Controller
     {
         $categories = Category::query()
             ->select(['id', 'title', 'slug', 'thumbnail'])
-            ->has('products')
-            ->get();
-
-        $brands = Brand::query()
-            ->leftJoin(
-                'products',
-                'products.brand_id',
-                '=',
-                'brands.id'
-            )
-            ->select('brands.id', 'brands.title', DB::raw('count(*) as count'))
-            ->groupBy('brands.id')
             ->has('products')
             ->get();
 
@@ -50,7 +36,6 @@ class CatalogController extends Controller
 
         return view('catalog.index', compact(
             'categories',
-            'brands',
             'products',
             'category'
         ));
