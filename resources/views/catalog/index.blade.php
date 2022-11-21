@@ -26,6 +26,7 @@
         <!-- sidebar -->
         <div class="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hidden">
             <form action="{{ route('catalog', $category) }}" class="divide-y divide-gray-200 space-y-5">
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
                 @foreach(filters() as $filter)
                     {!! $filter !!}
                 @endforeach
@@ -102,10 +103,10 @@
 
         <!-- products -->
         <div class="col-span-3">
-            <div x-data="{}" class="flex items-center mb-4">
+            <div class="flex items-center mb-4">
 
                 @includeIf('catalog.shared.sort', ['items' => sorting()])
-                
+
                 <div class="flex gap-2 ml-auto">
                     <div
                         class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
