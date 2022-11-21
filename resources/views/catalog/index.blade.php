@@ -108,20 +108,38 @@
                 @includeIf('catalog.shared.sort', ['items' => sorting()])
 
                 <div class="flex gap-2 ml-auto">
-                    <div
-                        class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
+                    <a
+                        href="{{ route('catalog', ['view'=>'grip']) }}"
+                        @class([
+                            'border  w-10 h-9 flex items-center justify-center rounded cursor-pointer',
+                            'border-gray-300  text-gray-600' => Cookie::get('view_products') == 'inline',
+                            'border-primary text-white bg-primary' => Cookie::get('view_products') != 'inline'
+                        ])
+                    >
                         <i class="fa-solid fa-grip-vertical"></i>
-                    </div>
-                    <div
-                        class="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
+                    </a>
+                    <a
+                        href="{{ route('catalog', ['view'=>'inline']) }}"
+                        @class([
+                            'border  w-10 h-9 flex items-center justify-center rounded cursor-pointer',
+                            'border-gray-300  text-gray-600' => Cookie::get('view_products') != 'inline',
+                            'border-primary text-white bg-primary' => Cookie::get('view_products') == 'inline'
+                        ])
+                    >
                         <i class="fa-solid fa-list"></i>
-                    </div>
+                    </a>
                 </div>
             </div>
-
-            <div class="grid grid-cols-3 gap-6">
-                @each('catalog.shared.product', $products, 'item')
-            </div>
+            
+            @if (Cookie::get('view_products') == 'inline')
+                <div class="col-span-9 space-y-4">
+                    @each('catalog.shared.product-inline', $products, 'item')
+                </div>
+            @else
+                <div class="grid grid-cols-3 gap-6">
+                    @each('catalog.shared.product', $products, 'item')
+                </div>
+            @endif
 
             <div class="mt-12">
                 {{ $products->withQueryString()->links() }}
