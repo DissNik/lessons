@@ -103,19 +103,9 @@
         <!-- products -->
         <div class="col-span-3">
             <div x-data="{}" class="flex items-center mb-4">
-                <form x-ref="sortForm" action="{{ route('catalog', $category) }}">
-                    <select
-                        name="sort"
-                        x-on:change="$refs.sortForm.submit()"
-                        id="sort"
-                        class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-                        <option value="">Default sorting</option>
-                        <option @selected(request('sort') === 'price') value="price">Price low to high</option>
-                        <option @selected(request('sort') === '-price') value="-price">Price high to low</option>
-                        <option @selected(request('sort') === 'title') value="title">Name product</option>
-                    </select>
-                </form>
 
+                @includeIf('catalog.shared.sort', ['items' => sorting()])
+                
                 <div class="flex gap-2 ml-auto">
                     <div
                         class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
