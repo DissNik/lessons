@@ -76,13 +76,10 @@ class Product extends Model
 
     public function scopeSorted(Builder $query)
     {
-        $query->when(request('sort'), function (Builder $q) {
-            $column = request()->str('sort');
-            if ($column->contains(['price', 'title'])) {
-                $direction = $column->contains('-') ? 'DESC' : 'ASC';
-                $q->orderBy((string)$column->remove('-'), $direction);
-            }
-        });
+        return app(Pipeline::class)
+            ->send($query)
+            ->through(sorting())
+            ->thenReturn();
     }
 
     public function brand(): BelongsTo

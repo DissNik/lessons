@@ -5,24 +5,14 @@ namespace Domain\Catalog\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Stringable;
 
-abstract class AbstractFilter implements Stringable
+abstract class AbstractFilter implements FilterContract, Stringable
 {
     public function __invoke(Builder $query, $next)
     {
         $this->apply($query);
-        
-        $next($query);
+
+        return $next($query);
     }
-
-    abstract public function title(): string;
-
-    abstract public function key(): string;
-
-    abstract public function apply(Builder $query): Builder;
-
-    abstract public function values(): array;
-
-    abstract public function view(): string;
 
     public function requestValue(string $index = null, mixed $default = null): mixed
     {

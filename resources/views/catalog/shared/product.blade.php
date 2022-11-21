@@ -1,6 +1,6 @@
 <div class="bg-white shadow rounded overflow-hidden group">
     <div class="relative">
-        <img src="{{ $item->makeThumbnail('400x297') }}" alt="product 1" class="w-full">
+        <img src="{{ $item->makeThumbnail('400x297') }}" alt="{{ $item->title }}" class="w-full">
         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center
                     justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
             <a href="#"
