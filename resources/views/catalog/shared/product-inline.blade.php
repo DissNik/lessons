@@ -1,24 +1,15 @@
 <div class="flex items-center justify-between border gap-6 p-4 border-gray-200 rounded">
     <div class="w-28">
         <div class="relative">
-            <img src="{{ $item->makeThumbnail('400x297') }}" alt="{{ $item->title }}" class="w-full">
-            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center
-                    justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                <a href="#"
-                   class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                   title="view product">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </a>
-                <a href="#"
-                   class="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                   title="add to wishlist">
-                    <i class="fa-solid fa-heart"></i>
-                </a>
-            </div>
+            <a href="{{ route('product', $item) }}" title="view product">
+                <img src="{{ $item->makeThumbnail('400x297') }}" alt="{{ $item->title }}" class="w-full">
+            </a>
         </div>
     </div>
     <div class="w-1/3">
-        <h2 class="text-gray-800 text-xl font-medium uppercase">{{ $item->title }}</h2>
+        <a href="{{ route('product', $item) }}" title="view product">
+            <h2 class="text-gray-800 text-xl font-medium uppercase">{{ $item->title }}</h2>
+        </a>
         <div class="flex items-center">
             <div class="flex gap-1 text-sm text-yellow-400">
                 <span><i class="fa-solid fa-star"></i></span>
