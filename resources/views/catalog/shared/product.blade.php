@@ -23,7 +23,9 @@
         </a>
         <div class="flex items-baseline mb-1 space-x-2">
             <p class="text-xl text-primary font-semibold">{{ $item->price }}</p>
-            <p class="text-sm text-gray-400 line-through">55.90</p>
+            @if($item->old_price)
+                <p class="text-sm text-gray-400 line-through">{{ $item->old_price }}</p>
+            @endif
         </div>
         <div class="flex items-center">
             <div class="flex gap-1 text-sm text-yellow-400">

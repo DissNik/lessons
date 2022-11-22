@@ -77,7 +77,9 @@
             </div>
             <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
                 <p class="text-xl text-primary font-semibold">{{ $product->price }}</p>
-                <p class="text-base text-gray-400 line-through">$55.00</p>
+                @if($product->old_price)
+                    <p class="text-base text-gray-400 line-through">{{ $product->old_price }}</p>
+                @endif
             </div>
 
             <p class="mt-4 text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos eius eum

@@ -23,7 +23,9 @@
     </div>
     <div class="flex items-baseline mb-1 space-x-2">
         <p class="text-xl text-primary font-semibold">{{ $item->price }}</p>
-        <p class="text-sm text-gray-400 line-through">55.90</p>
+        @if($item->old_price)
+            <p class="text-sm text-gray-400 line-through">{{ $item->old_price }}</p>
+        @endif
     </div>
     <a href="#"
        class="px-6 py-2 text-center text-sm text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">add

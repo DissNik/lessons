@@ -42,11 +42,13 @@ class Product extends Model
         'price',
         'on_home_page',
         'sorting',
-        'text'
+        'text',
+        'old_price'
     ];
 
     protected $casts = [
-        'price' => PriceCast::class
+        'price' => PriceCast::class,
+        'old_price' => PriceCast::class
     ];
 
     protected static function newFactory(): Factory
