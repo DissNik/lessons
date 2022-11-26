@@ -80,7 +80,7 @@ class Product extends Model
     {
         return app(Pipeline::class)
             ->send($query)
-            ->through(sorting())
+            ->through(sorter())
             ->thenReturn();
     }
 

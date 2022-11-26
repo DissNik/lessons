@@ -13,8 +13,8 @@ class CatalogRegistrar implements RouteRegistrar
     {
         Route::middleware('web')->group(function () {
             Route::get('/catalog/{category:slug?}', CatalogController::class)
-                ->name('catalog')
-                ->middleware(['view.products']);
+                ->middleware(['view.products'])
+                ->name('catalog');
         });
     }
 }

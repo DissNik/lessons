@@ -105,33 +105,33 @@
         <div class="col-span-3">
             <div class="flex items-center mb-4">
 
-                @includeIf('catalog.shared.sort', ['items' => sorting()])
+                @includeIf('catalog.shared.sort', ['items' => sorter()])
 
                 <div class="flex gap-2 ml-auto">
                     <a
-                        href="{{ route('catalog', ['view'=>'grip']) }}"
+                        href="{{ filter_url($category, ['view'=>'grid']) }}"
                         @class([
                             'border  w-10 h-9 flex items-center justify-center rounded cursor-pointer',
-                            'border-gray-300  text-gray-600' => Cookie::get('view_products') == 'inline',
-                            'border-primary text-white bg-primary' => Cookie::get('view_products') != 'inline'
+                            'border-gray-300 text-gray-600' => !is_catalog_view('grid'),
+                            'border-primary text-white bg-primary' => is_catalog_view('grid')
                         ])
                     >
                         <i class="fa-solid fa-grip-vertical"></i>
                     </a>
                     <a
-                        href="{{ route('catalog', ['view'=>'inline']) }}"
+                        href="{{ filter_url($category, ['view'=>'inline']) }}"
                         @class([
                             'border  w-10 h-9 flex items-center justify-center rounded cursor-pointer',
-                            'border-gray-300  text-gray-600' => Cookie::get('view_products') != 'inline',
-                            'border-primary text-white bg-primary' => Cookie::get('view_products') == 'inline'
+                            'border-gray-300  text-gray-600' => !is_catalog_view('inline'),
+                            'border-primary text-white bg-primary' => is_catalog_view('inline')
                         ])
                     >
                         <i class="fa-solid fa-list"></i>
                     </a>
                 </div>
             </div>
-            
-            @if (Cookie::get('view_products') == 'inline')
+
+            @if (is_catalog_view('inline'))
                 <div class="col-span-9 space-y-4">
                     @each('catalog.shared.product-inline', $products, 'item')
                 </div>
