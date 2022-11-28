@@ -1,8 +1,8 @@
 <?php
 
-namespace Domain\Catalog\Sorting;
+namespace Domain\Catalog\Sorter;
 
-class SortingManager
+class SorterManager
 {
     public function __construct(
         protected array $items = []

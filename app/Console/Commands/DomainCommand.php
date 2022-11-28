@@ -10,6 +10,7 @@ class DomainCommand extends Command
 {
     protected array $directories = [
         'Collections',
+        'Models',
         'Actions',
         'Providers',
         'QueryBuilders'
@@ -49,7 +50,7 @@ class DomainCommand extends Command
 
         if (Str::contains(
             $domainProvider,
-            'Domain\\'.$this->domain.'\\Providers\\'.$this->domain.'ServiceProvider'
+            'Domain\\' . $this->domain . '\\Providers\\' . $this->domain . 'ServiceProvider'
         )) {
             return;
         }
@@ -71,17 +72,17 @@ class DomainCommand extends Command
 
         if (Str::contains(
             $routeProvider,
-            'App\\Routing\\'.$this->domain.'Registrar'
+            'App\\Routing\\' . $this->domain . 'Registrar'
         )) {
             return;
         }
 
         file_put_contents($routeProviderPath, preg_replace(
             '/protected array \$registrars = \[\n\s+/m',
-            'protected array $registrars = ['.PHP_EOL
-            .$this->tab(2)
-            .'\App\Routing\\'.$this->domain.'Registrar::class,'.PHP_EOL
-            .$this->tab(2),
+            'protected array $registrars = [' . PHP_EOL
+            . $this->tab(2)
+            . '\App\Routing\\' . $this->domain . 'Registrar::class,' . PHP_EOL
+            . $this->tab(2),
             $routeProvider
         ));
     }
@@ -112,14 +113,14 @@ class DomainCommand extends Command
 
     protected function registerMethodSignature(): string
     {
-        return 'public function register(): void'.PHP_EOL.'    {'.PHP_EOL;
+        return 'public function register(): void' . PHP_EOL . '    {' . PHP_EOL;
     }
 
     protected function appRegister(string $prefix): string
     {
-        return $this->tab(2).'$this->app->register('.PHP_EOL.
-            $this->tab(3)."\\Domain\\$prefix\\Providers\\{$prefix}ServiceProvider::class".PHP_EOL.
-            $this->tab(2).');'.PHP_EOL.PHP_EOL;
+        return $this->tab(2) . '$this->app->register(' . PHP_EOL .
+            $this->tab(3) . "\\Domain\\$prefix\\Providers\\{$prefix}ServiceProvider::class" . PHP_EOL .
+            $this->tab(2) . ');' . PHP_EOL . PHP_EOL;
     }
 
     protected function tab(int $tabCount = 1): string

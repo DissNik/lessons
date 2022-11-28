@@ -62,7 +62,7 @@
                 </p>
                 <p class="space-x-2">
                     <span class="text-gray-800 font-semibold">Brand: </span>
-                    <span class="text-gray-600">{{ $product->brand->title }}</span>
+                    <span class="text-gray-600">{{ $product->brand?->title }}</span>
                 </p>
                 @if ($product->categories->get(0))
                     <p class="space-x-2">
@@ -77,13 +77,14 @@
             </div>
             <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
                 <p class="text-xl text-primary font-semibold">{{ $product->price }}</p>
-                <p class="text-base text-gray-400 line-through">$55.00</p>
+                @if($product->old_price)
+                    <p class="text-base text-gray-400 line-through">{{ $product->old_price }}</p>
+                @endif
             </div>
 
             <p class="mt-4 text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos eius eum
                 reprehenderit dolore vel mollitia optio consequatur hic asperiores inventore suscipit, velit
                 consequuntur, voluptate doloremque iure necessitatibus adipisci magnam porro.</p>
-
             @foreach($options as $option => $values)
                 <div class="pt-4">
                     <h3 class="text-sm text-gray-800 uppercase mb-1">{{ $option }}</h3>
@@ -196,14 +197,16 @@
                 {{ $product->text }}
             </div>
 
-            <table class="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
-                @foreach($product->properties as $property)
-                    <tr>
-                        <th class="py-2 px-4 border border-gray-300 w-40 font-medium">{{ $property->title }}</th>
-                        <th class="py-2 px-4 border border-gray-300 ">{{ $property->pivot->value }}</th>
-                    </tr>
-                @endforeach
-            </table>
+            @if($product->json_properties)
+                <table class="table-auto border-collapse w-full text-left text-gray-600 text-sm mt-6">
+                    @foreach($product->json_properties as $property => $value)
+                        <tr>
+                            <th class="py-2 px-4 border border-gray-300 w-40 font-medium">{{ $property }}</th>
+                            <th class="py-2 px-4 border border-gray-300 ">{{ $value }}</th>
+                        </tr>
+                    @endforeach
+                </table>
+            @endif
         </div>
     </div>
     <!-- ./description -->

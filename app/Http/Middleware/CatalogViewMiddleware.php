@@ -6,13 +6,14 @@ use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 
-class ViewProducts
+class CatalogViewMiddleware
 {
     public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
         if ($request->has('view')) {
-            return back()->cookie(
+            Cookie::queue(
                 cookie()->forever('view_products', $request->get('view'))
             );
         }

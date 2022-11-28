@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->json('json_properties')
-                ->nullable();
+            $table->integer('old_price')
+                ->default(0);
         });
     }
 
@@ -17,7 +17,7 @@ return new class extends Migration {
     {
         if (app()->isLocal()) {
             Schema::table('products', function (Blueprint $table) {
-                $table->dropColumn('json_properties');
+                $table->dropColumn('old_price');
             });
         }
     }

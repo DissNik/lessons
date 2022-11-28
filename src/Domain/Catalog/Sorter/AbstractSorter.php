@@ -1,16 +1,14 @@
 <?php
 
-namespace Domain\Catalog\Sorting;
+namespace Domain\Catalog\Sorter;
 
 use Illuminate\Database\Eloquent\Builder;
 
-abstract class AbstractSorting
+abstract class AbstractSorter
 {
     public function __invoke(Builder $query, $next)
     {
-        $this->apply($query);
-
-        return $next($query);
+        return $next($this->apply($query));
     }
 
     abstract public function apply(Builder $query): Builder;

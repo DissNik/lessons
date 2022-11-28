@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Product\Models;
 
+use App\Jobs\ProductJsonProperties;
 use Database\Factories\ProductFactory;
 use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
+use Domain\Product\QueryBuilders\ProductQueryBuilder;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Pipeline\Pipeline;
 use Support\Casts\PriceCast;
 use Support\Traits\Models\HasSlug;
 use Support\Traits\Models\HasThumbnail;
@@ -42,44 +43,40 @@ class Product extends Model
         'price',
         'on_home_page',
         'sorting',
-        'text'
+        'text',
+        'old_price',
+        'json_properties'
     ];
 
     protected $casts = [
-        'price' => PriceCast::class
+        'price' => PriceCast::class,
+        'old_price' => PriceCast::class,
+        'json_properties' => 'array'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (Product $product) {
+            ProductJsonProperties::dispatch($product)
+                ->delay(now()->addSecond(10));
+        });
+    }
 
     protected static function newFactory(): Factory
     {
         return new ProductFactory();
     }
 
+    public function newEloquentBuilder($query): ProductQueryBuilder
+    {
+        return new ProductQueryBuilder($query);
+    }
+
     protected function thumbnailDir(): string
     {
         return 'products';
-    }
-
-    public function scopeHomePage(Builder $query)
-    {
-        $query->where('on_home_page', true)
-            ->orderBy('sorting')
-            ->limit(8);
-    }
-
-    public function scopeFiltered(Builder $query)
-    {
-        return app(Pipeline::class)
-            ->send($query)
-            ->through(filters())
-            ->thenReturn();
-    }
-
-    public function scopeSorted(Builder $query)
-    {
-        return app(Pipeline::class)
-            ->send($query)
-            ->through(sorting())
-            ->thenReturn();
     }
 
     public function brand(): BelongsTo

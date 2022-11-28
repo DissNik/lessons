@@ -2,10 +2,10 @@
 
 namespace App\Sorting;
 
-use Domain\Catalog\Sorting\AbstractSorting;
+use Domain\Catalog\Sorter\AbstractSorter;
 use Illuminate\Database\Eloquent\Builder;
 
-class TitleSorting extends AbstractSorting
+class TitleSorter extends AbstractSorter
 {
     public function apply(Builder $query): Builder
     {

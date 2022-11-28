@@ -4,10 +4,10 @@ namespace App\Providers;
 
 use App\Filters\BrandFilter;
 use App\Filters\PriceFilter;
-use App\Sorting\PriceSorting;
-use App\Sorting\TitleSorting;
+use App\Sorting\PriceSorter;
+use App\Sorting\TitleSorter;
 use Domain\Catalog\Filters\FilterManager;
-use Domain\Catalog\Sorting\SortingManager;
+use Domain\Catalog\Sorter\SorterManager;
 use Illuminate\Support\ServiceProvider;
 
 class CatalogServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class CatalogServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(FilterManager::class);
-        $this->app->singleton(SortingManager::class);
+        $this->app->singleton(SorterManager::class);
     }
 
     public function boot(): void
@@ -25,9 +25,9 @@ class CatalogServiceProvider extends ServiceProvider
             new BrandFilter()
         ]);
 
-        app(SortingManager::class)->registerSorting([
-            new PriceSorting(),
-            new TitleSorting()
+        app(SorterManager::class)->registerSorting([
+            new PriceSorter(),
+            new TitleSorter()
         ]);
     }
 }
