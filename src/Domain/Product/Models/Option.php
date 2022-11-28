@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Domain\Product\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +13,7 @@ class Option extends Model
     protected $fillable = [
         'title'
     ];
-    
+
     public function optionValues(): BelongsToMany
     {
         return $this->belongsToMany(OptionValue::class);

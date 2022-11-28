@@ -8,9 +8,7 @@ abstract class AbstractSorter
 {
     public function __invoke(Builder $query, $next)
     {
-        $this->apply($query);
-
-        return $next($query);
+        return $next($this->apply($query));
     }
 
     abstract public function apply(Builder $query): Builder;

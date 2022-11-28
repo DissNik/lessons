@@ -21,14 +21,16 @@
             <div class="text-xs text-gray-500 ml-3">(150)</div>
         </div>
 
-        <table class="table-auto w-full text-left text-gray-600 text-xs mt-6 mb-6">
-            @foreach($item->json_properties as $property => $value)
-                <tr>
-                    <th class="px-4w-40 font-medium">{{ $property }}</th>
-                    <th class="px-4">{{ $value }}</th>
-                </tr>
-            @endforeach
-        </table>
+        @if($item->json_properties)
+            <table class="table-auto w-full text-left text-gray-600 text-xs mt-6 mb-6">
+                @foreach($item->json_properties as $property => $value)
+                    <tr>
+                        <th class="px-4w-40 font-medium">{{ $property }}</th>
+                        <th class="px-4">{{ $value }}</th>
+                    </tr>
+                @endforeach
+            </table>
+        @endif
         <div class="flex items-center justify-between">
             <div class="flex items-baseline mb-1 space-x-2">
                 <p class="text-xl text-primary font-semibold">{{ $item->price }}</p>

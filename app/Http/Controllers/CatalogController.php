@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Domain\Catalog\Models\Category;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Domain\Product\Models\Product;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -20,16 +19,8 @@ class CatalogController extends Controller
 
         $products = Product::query()
             ->select(['id', 'title', 'slug', 'price', 'thumbnail', 'old_price', 'json_properties'])
-            ->when(request('search'), function (Builder $query) {
-                $query->whereFullText(['title', 'text'], request('search'));
-            })
-            ->when($category->exists, function (Builder $query) use ($category) {
-                $query->whereRelation(
-                    'categories',
-                    'categories.id',
-                    '=',
-                    $category->id);
-            })
+            ->search()
+            ->withCategory($category)
             ->filtered()
             ->sorted()
             ->paginate(9);

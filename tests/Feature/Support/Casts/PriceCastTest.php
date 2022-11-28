@@ -3,8 +3,8 @@
 namespace Tests\Feature\Support\Casts;
 
 
-use App\Models\Product;
 use Database\Factories\ProductFactory;
+use Domain\Product\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use InvalidArgumentException;
 use Support\ValueObjects\Price;
