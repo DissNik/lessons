@@ -5,6 +5,7 @@ namespace Domain\Cart;
 use Domain\Cart\Contract\CartIdentityStorageContract;
 use Domain\Cart\Models\Cart;
 use Domain\Cart\Models\CartItem;
+use Domain\Cart\StorageIdentities\FakeIdentityStorage;
 use Domain\Product\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,11 @@ class CartManager
         protected CartIdentityStorageContract $identityStorage
     )
     {
+    }
+
+    public static function fake(): void
+    {
+        app()->bind(CartIdentityStorageContract::class, FakeIdentityStorage::class);
     }
 
     private function cacheKey(): string
@@ -100,14 +106,20 @@ class CartManager
 
     public function truncate(): void
     {
-        $this->get()?->delete();
+        if ($this->get()) {
+            $this->get()->delete();
+        }
 
         $this->forgetCache();
     }
 
     public function cartItems(): Collection
     {
-        return $this->get()?->cartItems ?? collect([]);
+        if ($this->get()) {
+            return $this->get()->cartItems;
+        }
+
+        return collect([]);
     }
 
     public function items(): Collection
