@@ -38,9 +38,14 @@
                     <p class="text-sm text-gray-400 line-through">{{ $item->old_price }}</p>
                 @endif
             </div>
-            <a href="#"
-               class="px-6 py-2 text-center text-sm text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">add
-                to cart</a>
+            <form action="{{ route('cart.add', $item) }}" method="POST">
+                @csrf
+                <button type="submit"
+                        class="px-6 py-2 text-center text-sm text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">
+                    Add
+                    to cart
+                </button>
+            </form>
         </div>
     </div>
 </div>
