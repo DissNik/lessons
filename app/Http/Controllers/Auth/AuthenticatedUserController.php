@@ -19,13 +19,13 @@ class AuthenticatedUserController extends Controller
 
     public function store(SignInFormRequest $request): RedirectResponse
     {
-        if (!auth()->attempt($request->validated())) {
+        if (!auth()->once($request->validated())) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ])->onlyInput('email');
         }
 
-        SessionRegenerator::run();
+        SessionRegenerator::run(fn() => auth()->login(auth()->user()));
 
         return redirect()
             ->intended(route('home'));
