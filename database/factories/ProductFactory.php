@@ -24,6 +24,7 @@ class ProductFactory extends Factory
             'brand_id' => Brand::query()->inRandomOrder()->value('id'),
             'on_home_page' => $this->faker->boolean(),
             'sorting' => $this->faker->numberBetween(1, 999),
+            'quantity' => $this->faker->numberBetween(0, 20),
             'text' => $this->faker->text(),
             'old_price' => $this->faker->boolean() ? $old_price : 0
         ];
