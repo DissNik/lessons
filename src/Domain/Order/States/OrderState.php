@@ -43,7 +43,7 @@ abstract class OrderState
         event(new OrderStatusChanged(
             $this->order,
             $this->order->status,
-            $state->value()
+            $state
         ));
     }
 }
