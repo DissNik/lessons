@@ -45,7 +45,8 @@ class Product extends Model
         'sorting',
         'text',
         'old_price',
-        'json_properties'
+        'json_properties',
+        'quantity'
     ];
 
     protected $casts = [
