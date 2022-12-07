@@ -86,7 +86,7 @@
                     <a
                         href="{{ route('catalog') }}"
                     >За покупками</a>
-                    <a href="#"
+                    <a href="{{ route('order') }}"
                        class="px-6 py-2 text-center text-sm text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium">Оформить
                         заказ</a>
                 </div>
