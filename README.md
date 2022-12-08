@@ -25,7 +25,7 @@
     ```
     sail yarn install
     ```
-- Установка магазина
+- Установка проекта
     ```
     sail artisan shop:install
     ```
@@ -36,13 +36,13 @@
     ```
     sail yarn run dev
     ```
-- Обновление базы магазина
+- Обновление проекта
     ```
-    sail artisan shop:refresh `Refresh project`
+    sail artisan shop:refresh
     ```
 - Создание домена DDD
     ```
-    sail artisan shop:domain `Make new domain`
+    sail artisan shop:domain
     ```
 
 ## Deploy
