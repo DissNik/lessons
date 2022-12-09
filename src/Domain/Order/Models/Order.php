@@ -4,6 +4,7 @@ namespace Domain\Order\Models;
 
 use Domain\Customer\Models\User;
 use Domain\Order\Enums\OrderStatuses;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Support\Casts\PriceCast;
 
 /**
  *
- * @method static Order query()
+ * @method static Builder|Order query()
  */
 class Order extends Model
 {
